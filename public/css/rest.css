@@ -1,0 +1,119 @@
+@charset "utf-8";
+
+
+/* CSS Document */
+html, body, ul, li, ol, dl, dd, dt, p, h1, h2, h3, h4, h5, h6, form, fieldset, legend, img { margin:0; padding:0; }
+
+fieldset, c{ border:none; }
+
+img{display: block;}
+
+address, caption, cite, code, dfn, th, var { font-style:normal; font-weight:normal; }
+
+ul, ol ,li{ list-style:none; }
+
+body { color:#333; font:12px PingFangSC-Regular; background:#fff;}
+
+a { color:#666; text-decoration:none; }
+/*清除浮动*/
+.clear{clear:both}
+*{box-sizing:border-box}
+body,html,#root{
+    height: 100%;
+    overflow: hidden;
+}
+/* .ant-table-thead>tr th:nth-last-child(1){
+    width: 150px !important;
+}
+.ant-table-thead>tr th:nth-last-child(2){
+    width: 120px !important;
+}
+.ant-table-thead>tr th:nth-last-child(4){
+    width: 120px !important;
+}
+.ant-table-thead>tr th:nth-last-child(5){
+    width: 110px !important;
+}
+.ant-table-thead>tr th:nth-last-child(6){
+    width: 110px !important;
+}
+.ant-table-thead>tr th:nth-last-child(11){
+    width: 78px !important;
+} */
+/* .ant-spin-container>.ant-pagination{
+    display: none;
+} */
+.ant-modal-footer{
+    display: none;
+}
+/* .ant-modal{
+    width: 1220px !important;
+} */
+.ant-table{
+    font-size: 12px !important;
+}
+.ant-table-thead > tr > th, .ant-table-tbody > tr > td{
+    padding: 8px 8px !important
+}
+.editable-cell-value-wrap{
+    padding: 0 !important;
+}
+.ant-form-horizontal>.ant-form-item{
+    vertical-align: 0 !important;
+}
+.Supervise{
+    width: 800px !important;
+}
+.FromDetermine{
+    margin-bottom:0 !important;
+}
+.FromInput>.ant-form-item{
+    margin-bottom: 12px !important;
+}
+.ant-table-filter-dropdown-btns{
+    display: flex;
+    justify-content: space-between;
+}
+.ant-row{
+    margin-bottom:0 !important;
+}
+.ant-layout-sider,.ant-menu-dark{
+    background-color:#111B39 !important
+}
+.AdministrationStyle .ant-modal-content{
+    position: absolute !important;
+    width: 500px !important;
+    right: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    top: 0 !important;
+    margin: auto !important;
+}
+.ReverseChecking{
+    width:1200px !important
+}
+.FileManagementTable .ant-table-pagination{
+    display: none !important;
+}
+.SuperviseTable .ant-table-pagination{
+    display: none !important;
+}
+.ModalWJJC{
+    width: 700px !important;
+}
+#mountNodePie #canvas_1{
+    width: 480px !important;
+    height: 480px !important;
+}
+.SHLSFX .ant-table-pagination{
+    display: none !important;
+}
+
+.supervisorTableFY .ant-table-pagination{
+    display: none !important;
+}
+
+
+
+
+
