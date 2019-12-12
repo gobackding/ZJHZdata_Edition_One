@@ -68,7 +68,7 @@ class LayoutComponent extends Component {
                         </Row>
 
                     </Header>
-                    <div style={{ height: '70px' }}></div>
+                    <div style={{ height: '75px' }}></div>
                     <Content style={{ overflow: 'auto', height: "100%" }}>
                         <div style={{  background: '#f4f4f4' }}>
                             {this.props.children}

@@ -34,7 +34,9 @@ class Home extends Component {
             FromList: {},
             DeletedBool: false,//删除框的布尔值
             DeletedId: '',//删除的id
-            TSBNSCBool: false//提示用户不能删除的
+            TSBNSCBool: false,//提示用户不能删除的
+            AbolishBool:false,//废除的布尔值
+            Abolish:{},//废除的单条数据
         }
     }
     onSelectChange = selectedRowKeys => {
@@ -268,9 +270,12 @@ class Home extends Component {
                         onOk={this.handleOk.bind(this)}
                         onCancel={this.handleCancel.bind(this)}
                     >
-                        <p style={{ fontSize: '16px' }} >您确认要删除该条规则吗</p>
+                        <p style={{ fontSize: '16px' }} >
+                            您确认要删除该条规则吗?<br/>
+                            删除后无法进行规则检核
+                        </p>
                         <Button type="primary" style={{ marginRight: '10px' }} onClick={this.QRDelete.bind(this)}>确定</Button>
-                        <Button>取消</Button>
+                        <Button onClick={this.handleCancel.bind(this)}>取消</Button>
                     </Modal>
                     <Modal
                         title="提示框"
@@ -280,9 +285,21 @@ class Home extends Component {
                     >
                         <p style={{ fontSize: '16px' }} >对不起该条规则不是您自有规则不能删除。</p>
                         <Button type="primary" style={{ marginRight: '10px' }} onClick={this.TSBUSCx.bind(this)}>确定</Button>
-
                     </Modal>
 
+
+                    <Modal
+                        title="废除框"
+                        visible={this.state.AbolishBool}
+                        onOk={this.handleOk.bind(this)}
+                        onCancel={this.handleCancel.bind(this)}
+                    >
+                        <p style={{ fontSize: '16px' }} >
+                            您确认要废除该条规则吗？
+                        </p>
+                        <Button type="primary" style={{ marginRight: '10px' }} onClick={this.QRAbolish.bind(this)}>确定</Button>
+                        <Button onClick={this.handleCancel.bind(this)}>取消</Button>
+                    </Modal>
                 </div>
             </Fragment >
 
@@ -385,7 +402,8 @@ class Home extends Component {
             NewlyAdded: false,
             visibleNew: false,
             DeletedBool: false,
-            TSBNSCBool: false
+            TSBNSCBool: false,
+            AbolishBool:false
         })
     }
     // handleOk 确定修改
@@ -407,11 +425,22 @@ class Home extends Component {
         })
     }
     // 废掉
-    async AbolishHandlerValue(record) {
-        console.log(record, "废掉")
-        let Abandon = await ADANDONVALUE(record.id)
+     AbolishHandlerValue(record) {
+       this.setState({
+           AbolishBool:true,
+           Abolish:record
+       })
+    }
+    // 废掉确认
+    async QRAbolish(){
+        let Abandon = await ADANDONVALUE(this.state.Abolish.id)
         console.log(Abandon, "Abandon")
-        this.HandlerValue()
+        this.setState({
+            AbolishBool:false
+        },()=>{
+            this.HandlerValue()
+        })
+        
     }
     // 删除
     DeleteHandlerValue(record) {

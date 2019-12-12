@@ -27,7 +27,7 @@ class SBAdministration extends React.Component{
     async SubmissionSB(lc) {
         console.log(lc)
         let SBValue = {}
-        let FromListStatus = JSON.parse(sessionStorage.getItem("FromListStatus"))
+        let FromListStatus = JSON.parse(localStorage.getItem("FromListStatus"))
 
         SBValue.lc = lc
         SBValue.Time = '20161116'

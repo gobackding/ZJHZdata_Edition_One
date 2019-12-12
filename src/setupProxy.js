@@ -15,7 +15,7 @@ module.exports = (app)=>{
         changeOrigin:true,
     }))
 
-    // 阿里云
+    // 内网
 //     app.use(proxy("/api",{
 //         target:"http://172.16.10.87:8098",
 //         changeOrigin:true,
@@ -28,7 +28,7 @@ module.exports = (app)=>{
 //         changeOrigin:true,
 //     }))
 
-// 内网服务器
+// 阿里云
 //     app.use(proxy("/api",{
 //         target:"http://59.110.142.255:8098",
 //         changeOrigin:true,

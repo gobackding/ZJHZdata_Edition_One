@@ -78,8 +78,8 @@ export const JHCSID = (val) => http.post("/api/review/rules/queryRules", {
 
 // 网后端传id 检核
 export const JHIDSH = (val) => http.get("/api/review/checkin", {
-    checkTime: val.Time,
-    ids: val.List
+    checkTime: '2019-11-16',
+    ids: val
 })
 // 检核状态点击查看状态跳转页面
 export const JHTZCK = (val) => http.get("/api/review/dataCheckList", {

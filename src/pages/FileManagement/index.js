@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { Table, Button, Radio, Divider, Form, Input, Pagination, Modal } from 'antd';
-import { FILEMANAGEM,FILEWJJC } from "@api"
+import { FILEMANAGEM, FILEWJJC } from "@api"
 import Inspection from "./Inspection"
 const { Search } = Input;
 @Form.create()
@@ -11,15 +11,15 @@ class FileManagement extends React.Component {
             data: [
                 {
                     id: 1,
-                    jgztfl: "公共信息",
-                    jgztflbm: 11,
-                    bmEn: 32,
-                    sjjhzt: `2`,
-                    wjjhzt: "1",
-                    DocumentInspection: "文件检查",
-                    DataLoading: "数据加载",
-                    bool: true,
-                    LoadingBool: true
+                    jgztfl: "暂无",
+                    jgztflbm: '暂无',
+                    bmEn: '暂无',
+                    sjjhzt: `3`,
+                    wjjhzt: "3",
+                    DocumentInspection: "暂无",
+                    DataLoading: "暂无",
+                    bool: false,
+                    LoadingBool: false
                 }
             ],
             selectedRowKeys: [], // Check here to configure the default column
@@ -33,8 +33,8 @@ class FileManagement extends React.Component {
             InspectBool: false,
             InspectList: [],//文件检查,
             TipsBool: false,//提示
-            OriginalData:[],//原始数据
-            
+            OriginalData: [],//原始数据
+
         }
     }
     start = () => {
@@ -110,6 +110,10 @@ class FileManagement extends React.Component {
                         return <span>
                             文件检核未通过
                         </span>
+                    }else if (record.sjjhzt == "3") {
+                        return <span>
+                            文件暂无
+                        </span>
                     }
 
                 }
@@ -131,6 +135,10 @@ class FileManagement extends React.Component {
                     } else if (record.wjjhzt == "2") {
                         return <span>
                             数据检核未通过
+                        </span>
+                    }else if (record.wjjhzt == "3") {
+                        return <span>
+                            数据暂无
                         </span>
                     }
 
@@ -213,8 +221,15 @@ class FileManagement extends React.Component {
                         onChange={this.KeyWordValue.bind(this)}
                     />
                     <Input placeholder="请输入表名" style={{ width: 150, marginLeft: '12px' }} onChange={this.TableNameValue.bind(this)} />
-                    <Button type="primary" style={{ margin: ' 0 6px' }} onClick={this.InspectClick.bind(this)}>文件检查</Button>
-                    <Button type="primary" style={{ margin: ' 0 6px' }} onClick={this.LoadClick.bind(this)}>数据加载</Button>
+                    <Button type="primary"
+                        style={{ margin: ' 0 6px' }}
+                        onClick={this.InspectClick.bind(this)}>文件检查</Button>
+                    <Button type="primary"
+                        style={{ margin: ' 0 6px' }}
+                        onClick={this.LoadClick.bind(this)}>数据加载</Button>
+                    <Button type="primary"
+                        style={{ margin: '0 5px' }}
+                        onClick={this.GoReview.bind(this)}>去检核</Button>
                 </div>
 
                 <div style={{ backgroundColor: "#FFFFFF", padding: "10px" }} className="FileManagementTable">
@@ -235,17 +250,17 @@ class FileManagement extends React.Component {
                     <Inspection val={this.state.InspectList} />
                 </Modal>
                 <div className="InspectionTable">
-                <Modal
-                    title="文件检查"
-                    visible={this.state.TipsBool}
-                    onOk={this.handleOk.bind(this)}
-                    onCancel={this.handleCancel.bind(this)}
-                    
-                >
-                    <p>抱歉您的文件名不存在！！！</p>
-                    <Button onClick={this.CloseClick.bind(this)}>关闭</Button>
-                </Modal>
-               </div>
+                    <Modal
+                        title="文件检查"
+                        visible={this.state.TipsBool}
+                        onOk={this.handleOk.bind(this)}
+                        onCancel={this.handleCancel.bind(this)}
+
+                    >
+                        <p>抱歉您的文件名不存在！！！</p>
+                        <Button onClick={this.CloseClick.bind(this)}>关闭</Button>
+                    </Modal>
+                </div>
             </Fragment>
         )
     }
@@ -272,35 +287,40 @@ class FileManagement extends React.Component {
     }
     // 页面初始化渲染的数据
     async HandlerValueList() {
-       
-
-
         let DataList = await FILEMANAGEM()
         console.log(DataList, "DataList")
-        let OriginalData=JSON.parse(JSON.stringify(DataList.data))
-        let DisplayData=JSON.parse(JSON.stringify(DataList.data))
-
-       
-        for (var i = 0; i < DisplayData.length; i++) {
-            if (DisplayData[i].papersName == "文件不存在！！！") {
-                DisplayData[i].bool = false
-            } else {
-                // 查出下标
-                let index=DisplayData[i].papersName.indexOf("-")
-                // 截取值
-                DisplayData[i].papersName=DisplayData[i].papersName.slice(index+1)
-                DisplayData[i].bool = true
+        if (DataList.data) {
+            let OriginalData = JSON.parse(JSON.stringify(DataList.data))
+            let DisplayData = JSON.parse(JSON.stringify(DataList.data))
+            for (var i = 0; i < DisplayData.length; i++) {
+                if (DisplayData[i].papersName == "文件不存在！！！") {
+                    DisplayData[i].bool = false
+                } else {
+                    // 查出下标
+                    let index = DisplayData[i].papersName.indexOf("-")
+                    // 截取值
+                    DisplayData[i].papersName = DisplayData[i].papersName.slice(index + 1)
+                    DisplayData[i].bool = true
+                }
             }
+            this.setState({
+                OriginalData: OriginalData,
+                data: DisplayData,
+                currPage: DataList.data.currPage,
+                totalCount: DataList.data.totalCount
+            }, () => {
+                console.log(this.state.OriginalData, "OriginalData")
+            })
+        }else{
+            this.setState({
+                data: [],
+                currPage: 1,
+                totalCount: 10
+            }, () => {
+                console.log(this.state.OriginalData, "OriginalData")
+            })
         }
-        this.setState({
-            OriginalData:OriginalData,
-            data: DisplayData,
-            currPage: DataList.data.currPage,
-            totalCount: DataList.data.totalCount
-        },()=>{
-            console.log(this.state.OriginalData,"OriginalData")
-        })
-        console.log(DataList, "DataList")
+
     }
     // 页面筛选
     onChange(pageNumber) {
@@ -326,7 +346,6 @@ class FileManagement extends React.Component {
     }
     // 文件检查
     async InspectClick() {
-       
         let InspectList = []
         let DataList = this.state.data
         for (var i = 0; i < DataList.length; i++) {
@@ -335,17 +354,17 @@ class FileManagement extends React.Component {
             }
         }
         let TJSJ = []
-        let YSSJ=this.state.OriginalData
-        for( var j = 0 ; j<YSSJ.length ; j++ ){
-            for( var m = 0 ; m<InspectList.length ; m++ ){
-                if(YSSJ[j].id==InspectList[m].id){
+        let YSSJ = this.state.OriginalData
+        for (var j = 0; j < YSSJ.length; j++) {
+            for (var m = 0; m < InspectList.length; m++) {
+                if (YSSJ[j].id == InspectList[m].id) {
                     TJSJ.push(YSSJ[j].papersName)
                 }
             }
         }
-        console.log(TJSJ,"TJSJ")
+        console.log(TJSJ, "TJSJ")
         let pathNameData = await FILEWJJC(TJSJ)
-        console.log(pathNameData.data,"pathNameData")
+        console.log(pathNameData.data, "pathNameData")
 
         this.setState({
             InspectBool: true,
@@ -378,24 +397,28 @@ class FileManagement extends React.Component {
     }
     // 加载按钮
     RadioClickLoading(val) {
-        let FromBool = val.LoadingBool
-        // eslint-disable-next-line no-unused-expressions
-        FromBool = !FromBool
-        console.log(FromBool)
-        let FromListId = val.id
-        let FromList = this.state.data
-        for (var i = 0; i < FromList.length; i++) {
-            if (FromListId == FromList[i].id) {
-                FromList[i].LoadingBool = FromBool
+        if (val.sjjhzt == "1") {
+            console.log(111)
+            let FromBool = val.LoadingBool
+            // eslint-disable-next-line no-unused-expressions
+            FromBool = !FromBool
+            console.log(FromBool)
+            let FromListId = val.id
+            let FromList = this.state.data
+            for (var i = 0; i < FromList.length; i++) {
+                if (FromListId == FromList[i].id) {
+                    FromList[i].LoadingBool = FromBool
+                }
             }
+            this.setState({
+                data: FromList
+            })
         }
-        this.setState({
-            data: FromList
-        })
+
     }
     // 文件检查
     async EditHandlerValue(val) {
-        let EditListArray=[]
+        let EditListArray = []
         EditListArray.push(arguments[1].papersName)
         let pathNameData = await FILEWJJC(EditListArray)
         console.log(pathNameData)
@@ -424,12 +447,10 @@ class FileManagement extends React.Component {
     }
     // DataLoadingFilter 数据加载按钮全选
     DataLoadingFilter(value, record) {
-
         let FromList = this.state.data
         if (value == "全选") {
             for (var i = 0; i < FromList.length; i++) {
-                if(FromList[i].sjjhzt=="0"){
-
+                if (FromList[i].sjjhzt == "1") {
                     FromList[i].LoadingBool = true
                 }
             }
@@ -448,7 +469,7 @@ class FileManagement extends React.Component {
         let FromList = this.state.data
         if (value == "全选") {
             for (var i = 0; i < FromList.length; i++) {
-                if(FromList[i].wjjhzt=="0" || FromList[i].wjjhzt=="2"){
+                if (FromList[i].wjjhzt == "0" || FromList[i].wjjhzt == "2") {
                     FromList[i].bool = true
                 }
             }
@@ -471,6 +492,12 @@ class FileManagement extends React.Component {
     // 输入框 搜索的小图标
     SearchInputValue(value) {
         console.log(value)
+    }
+    // 去检核
+    GoReview() {
+        console.log("去检核")
+        console.log(this)
+        this.props.history.push("/DataChecking/ClassfyList")
     }
 }
 export default FileManagement

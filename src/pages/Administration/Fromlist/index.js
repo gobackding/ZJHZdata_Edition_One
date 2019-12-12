@@ -27,6 +27,7 @@ class Fromlist extends React.Component {
                 <label style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }} >
                     <span>账号</span>
                     <Input type="text" 
+                    required="required"
                     style={{ width: '400px', height: '45px' }} 
                     onChange={this.UserInput.bind(this)}/>
                 </label>

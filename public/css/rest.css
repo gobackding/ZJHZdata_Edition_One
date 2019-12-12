@@ -62,7 +62,8 @@ body,html,#root{
     vertical-align: 0 !important;
 }
 .Supervise{
-    width: 800px !important;
+    width: 520px !important;
+    height: 520px !important;
 }
 .FromDetermine{
     margin-bottom:0 !important;
@@ -113,7 +114,41 @@ body,html,#root{
     display: none !important;
 }
 
-
-
-
+.ChartsOne #canvas_1{
+    width: 500px !important;
+}
+#ChartsThree #canvas_3{
+    width: 100% !important;
+    height: 400px !important;
+}
+#LSChartsOne #canvas_1{
+    width: 100% !important;
+    height: 450px !important;
+}
+#LSChartsTwo #canvas_2{
+    width: 100% !important;
+    height: 450px !important;
+}
+.ant-progress-inner{
+    background-color: #fff !important;
+}
+.jindu:after{
+    content:" ";
+   display:block;
+   clear:both;
+    height:0;
+    overflow:hidden;
+ }
+.SubmitReport{
+    display: none !important;
+}
+.CheckingUp{
+    display: none !important;
+}
+.UserInterface{
+    display: none !important;
+}
+.UserChoice{
+    display: none !important;
+}
 

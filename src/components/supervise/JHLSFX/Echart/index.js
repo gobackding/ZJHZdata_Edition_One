@@ -22,12 +22,17 @@ class Echart extends React.Component {
       }]
     }
   }
+  render() {
+    return (
+      <Fragment>
+        <div id="mountNodePie"></div>
+      </Fragment>
+    )
+  }
   componentDidMount() {
-    console.log(this.state.data, "88888")
     const chart = new G2.Chart({
       container: 'mountNodePie',
       forceFit: true,
-      height: window.innerHeight
     })
     chart.source(this.state.data, {
       sfsjbl: {
@@ -62,13 +67,6 @@ class Echart extends React.Component {
     chart.render();
   }
 
-  render() {
-    return (
-      <Fragment>
-        <div id="mountNodePie"></div>
-      </Fragment>
-    )
-  }
 
 }
 export default Echart

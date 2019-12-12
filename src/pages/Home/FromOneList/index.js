@@ -128,6 +128,16 @@ class FromOneList extends React.Component {
         let data = await NewAddedApi(FromListValue)
 
         if (data.msg == "成功") {
+            this.setState({
+                ruleSeq: "",
+                ruleType: "jack",
+                ruleImp: "关键",
+                srcTabNameCn: "",
+                srcTabNameEn: "",
+                gzVersion: "",
+                diySql: "",
+                ruleDesc: ""
+            })
             this.props.DetermineClick()
         }
 

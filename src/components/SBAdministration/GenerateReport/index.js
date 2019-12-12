@@ -12,34 +12,40 @@ const columns = [
         title: '规则号',
         dataIndex: 'ruleSeq',
         align: 'center',
-        width: '120px'
+        width: '120px',
+        ellipsis: true,
     },
     {
         title: '规则描述',
         dataIndex: 'ruleDesc',
         align: 'center',
-        width: '250px'
+        width: '250px',
+        ellipsis: true,
     },
     {
         title: '中文表名',
         dataIndex: 'srcTabNameCn',
         align: 'center',
+        ellipsis: true,
     },
     {
         title: '英文表名',
         dataIndex: 'srcTabNameEn',
         align: 'center',
+        ellipsis: true,
     },
     {
         title: '字段',
         dataIndex: 'dataFieldCode',
         align: 'center',
+        ellipsis: true,
         width: '100px'
     },
     {
         title: '失范总数',
         dataIndex: 'sfsjzl',
         align: 'center',
+        ellipsis: true,
         defaultSortOrder: 'descend',
         width: '100px',
         sorter: (a, b) => a.sfsjzl - b.sfsjzl,
@@ -48,6 +54,7 @@ const columns = [
         title: '失范比例',
         dataIndex: 'sfsjbl',
         align: 'center',
+        ellipsis: true,
         width: '100px',
         filterMultiple: false,
         sorter: (a, b) => {
@@ -58,6 +65,7 @@ const columns = [
         title: '采集日期',
         dataIndex: 'cjrq',
         align: 'center',
+        ellipsis: true,
         width: '100px'
     }
 ];

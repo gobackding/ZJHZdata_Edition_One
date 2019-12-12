@@ -4,7 +4,8 @@ import { Calendar } from 'antd';
 class calendar extends React.Component{
     render(){
         return(
-            <Calendar onPanelChange={this.onPanelChange.bind(this)} onSelect={this.onSelect.bind(this)} />
+           
+            <Calendar onPanelChange={this.onPanelChange.bind(this)}  fullscreen={false}  onSelect={this.onSelect.bind(this)}/>
         )
     }
     onPanelChange(value, mode) {
@@ -14,7 +15,7 @@ class calendar extends React.Component{
         const resTime = this.p(d.getHours()) + ':' + this.p(d.getMinutes()) + ':' + this.p(d.getSeconds())
         console.log(resDate)
         console.log(resTime)
-        this.props.calendarTime()
+        // this.props.calendarTime()
     }
     p(s) {
         return s < 10 ? '0' + s : s

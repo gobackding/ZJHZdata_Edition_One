@@ -1,8 +1,8 @@
 import React, { Fragment } from "react";
 import { Form, Table, Radio } from "antd"
 import QueryFunction from "./queryFunction"
-import { conditionApi, JHKSLBZS ,JHCHLIST} from "@api"
-import {SJJHZYX} from "@api/ClassfyList"
+import { conditionApi, JHKSLBZS, JHCHLIST } from "@api"
+import { SJJHZYX } from "@api/ClassfyList"
 import connect from "./connect"
 @connect
 @Form.create()
@@ -23,8 +23,9 @@ class classfyList extends React.Component {
             EditFromValue: {},
             NewlyAdded: false,
             visibleNew: false,
-            selectedRowKeys:[],
-            SJJHZYX:[]//重要性的数组
+            selectedRowKeys: [],
+            SJJHZYX: [],//重要性的数组
+            selectedRowKeys:[]
         }
     }
     onSelectChange = selectedRowKeys => {
@@ -35,10 +36,11 @@ class classfyList extends React.Component {
         let { sortedInfo, filteredInfo } = this.state;
         sortedInfo = sortedInfo || {};
         filteredInfo = filteredInfo || {};
-        const {  selectedRowKeys } = this.state;
+        const { selectedRowKeys } = this.state;
         const rowSelection = {
             selectedRowKeys,
             onChange: this.onSelectChange,
+            selectedRowKeys,
         };
         const columns = [
             {
@@ -46,7 +48,7 @@ class classfyList extends React.Component {
                 dataIndex: 'operation',
                 key: 'Choice',
                 width: "70px",
-                align:'center',
+                align: 'center',
                 ellipsis: true,
                 filters: [{ text: '全选', value: '1' }, { text: '取消', value: '0' }],
                 filterMultiple: false,
@@ -62,7 +64,7 @@ class classfyList extends React.Component {
                 title: '规则号',
                 dataIndex: 'ruleSeq',
                 key: 'ruleSeq',
-                align:'center',
+                align: 'center',
                 sortOrder: sortedInfo.columnKey === 'ruleSeq' && sortedInfo.order,
                 ellipsis: true,
             },
@@ -70,7 +72,7 @@ class classfyList extends React.Component {
                 title: '规则描述',
                 dataIndex: 'ruleDesc',
                 key: 'ruleDesc',
-                align:'center',
+                align: 'center',
                 sortOrder: sortedInfo.columnKey === 'ruleDesc' && sortedInfo.order,
                 ellipsis: true,
             },
@@ -78,7 +80,7 @@ class classfyList extends React.Component {
                 title: '中文表名',
                 dataIndex: 'srcTabNameCn',
                 key: 'srcTabNameCn',
-                align:'center',
+                align: 'center',
                 sortOrder: sortedInfo.columnKey === 'srcTabNameCn' && sortedInfo.order,
                 ellipsis: true,
             },
@@ -86,7 +88,7 @@ class classfyList extends React.Component {
                 title: '英文表名',
                 dataIndex: 'srcTabNameEn',
                 key: 'srcTabNameEn',
-                align:'center',
+                align: 'center',
                 filteredValue: filteredInfo.address || null,
                 sortOrder: sortedInfo.columnKey === 'srcTabNameEn' && sortedInfo.order,
                 ellipsis: true,
@@ -95,7 +97,7 @@ class classfyList extends React.Component {
                 title: '目标字段',
                 dataIndex: 'dataFieldCode',
                 key: 'dataFieldCode',
-                align:'center',
+                align: 'center',
 
                 filteredValue: filteredInfo.address || null,
                 sortOrder: sortedInfo.columnKey === 'dataFieldCode' && sortedInfo.order,
@@ -105,7 +107,7 @@ class classfyList extends React.Component {
                 title: '重要性',
                 dataIndex: 'ruleType',
                 key: 'ruleType',
-                align:'center',
+                align: 'center',
                 sortOrder: sortedInfo.columnKey === 'ruleType' && sortedInfo.order,
                 ellipsis: true,
             },
@@ -113,7 +115,7 @@ class classfyList extends React.Component {
                 title: '标准类型',
                 dataIndex: 'standardType',
                 key: 'standardType',
-                align:'center',
+                align: 'center',
                 sortOrder: sortedInfo.columnKey === 'standardType' && sortedInfo.order,
                 ellipsis: true,
             },
@@ -121,7 +123,7 @@ class classfyList extends React.Component {
                 title: '版本',
                 dataIndex: 'gzVersion',
                 key: 'gzVersion',
-                align:'center',
+                align: 'center',
                 sortOrder: sortedInfo.columnKey === 'gzVersion' && sortedInfo.order,
                 ellipsis: true,
             }
@@ -131,7 +133,7 @@ class classfyList extends React.Component {
                 <div style={{ height: '40px', backgroundColor: '#fff', lineHeight: '40px', paddingLeft: 10, fontSize: '14px', color: '#333' }}>
                     当前位置：首页-数据检核
                 </div>
-                <div style={{padding:'10px'}}>
+                <div style={{ padding: '10px' }}>
                     <QueryFunction
                         queryfunction={this.QueryFromList.bind(this)}
                         rewviewFromList={this.RewviewFromList.bind(this)}
@@ -145,7 +147,7 @@ class classfyList extends React.Component {
                         dataSource={this.state.data}
                         onChange={this.handleChange.bind(this)}
                         style={{ backgroundColor: '#fff' }}
-                        // rowSelection={rowSelection}
+                    // rowSelection={rowSelection}
                     >
                     </Table>
                 </div>
@@ -153,7 +155,7 @@ class classfyList extends React.Component {
         )
     }
     // 重置按钮-重新获取数据
-    NewDataList(){
+    NewDataList() {
         this.HandlerValue()
     }
     componentDidMount() {
@@ -173,23 +175,22 @@ class classfyList extends React.Component {
         })
         // 获取重要性
         let ZYX = await SJJHZYX()
-        console.log(ZYX,"ZYX")
+        console.log(ZYX, "ZYX")
         this.setState({
-            SJJHZYX:ZYX.data
+            SJJHZYX: ZYX.data
         })
-
     }
     // 重置按钮
-    ResetClick(){
+    ResetClick() {
         this.HandlerValue()
     }
     // 触发了检核数据的操作
     QueryFromListBool(val) {
-        console.log(val,"检核")
+        console.log(val, "检核")
         let BoolArray = []
-        let BoolLength = []
         let FromList = []
         let FromListBool = this.state.data
+        localStorage.setItem('review', JSON.stringify(1))
         for (var i = 0; i < FromListBool.length; i++) {
             if (FromListBool[i].bool == true) {
                 BoolArray.push(FromListBool[i].id)
@@ -263,11 +264,11 @@ class classfyList extends React.Component {
     };
     // 查询按钮
     async QueryFromList(val) {
-        console.log(val,"898989")
+        console.log(val, "898989")
         let QueryFromListValue = await JHCHLIST(val)
-        console.log(QueryFromListValue,"QueryFromListValue")
+        console.log(QueryFromListValue, "QueryFromListValue")
         this.setState({
-            data:QueryFromListValue.data
+            data: QueryFromListValue.data
         })
     }
     RewviewFromList(val) {

@@ -4,7 +4,7 @@ import { Calendar } from 'antd';
 class calendar extends React.Component{
     render(){
         return(
-            <Calendar onPanelChange={this.onPanelChange.bind(this)} onSelect={this.onSelect.bind(this)} />
+            <Calendar onPanelChange={this.onPanelChange.bind(this)}  fullscreen={false}  onSelect={this.onSelect.bind(this)}/>
         )
     }
     onPanelChange(value, mode) {

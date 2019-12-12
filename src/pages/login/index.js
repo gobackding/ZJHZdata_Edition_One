@@ -24,7 +24,6 @@ class Login extends Component{
                                     <Input type="text" placeholder="请输入用户名"/>
                                 )
                             }
-                           
                         </Form.Item>
                         <Form.Item>
                             {
@@ -34,9 +33,7 @@ class Login extends Component{
                                     <Input type="password" placeholder="请输入密码"/>
                                 )
                             }
-                            
                         </Form.Item>
-                        <span className="signAccount" onClick={this.props.ClickSignValue.bind(this)}>密码登录</span>
                         <Form.Item>
                            <Button block type="primary" htmlType="submit" style={{backgroundColor:'orange'}}>登陆</Button>
                         </Form.Item>

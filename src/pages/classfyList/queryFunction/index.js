@@ -1,12 +1,15 @@
 import React, { Fragment } from "react";
-import { Form, Input, Button, Select, Calendar, Alert, Modal } from "antd"
+import { Form, Input, Button, Select, Calendar, Alert, Modal, Progress } from "antd"
 import moment from 'moment';
 import connect from "./connect"
 import { QueryFunctionStyle } from "./styled"
+import { withRouter } from "react-router-dom"
+import { JHTZCK, JHIDSH } from "@api"
 const { Search } = Input
 
 
 const { Option } = Select
+@withRouter
 @connect
 @Form.create()
 class queryFunction extends React.Component {
@@ -23,11 +26,13 @@ class queryFunction extends React.Component {
             srcTabNameCn: "",
             srcTabNameEn: "",
             diySql: "",
-            ruleDesc: ""
+            ruleDesc: "",
+            Percentage: 0,
+            loading: false,//加载  检核中
         }
     }
     render() {
-        console.log(this.props,"87878")
+        console.log(this.props, "87878")
         return (
             <Fragment>
                 <div >
@@ -37,21 +42,17 @@ class queryFunction extends React.Component {
                             onChange={this.ruleSeqValue.bind(this)}
                             value={this.state.ruleSeq}
                             style={{ width: '140px', display: 'inline-block', }} />
-                        
                         <Select style={{ width: 140 }}
                             onChange={this.LevelhandleChange.bind(this)}
                             defaultValue='请选择类型'
                             style={{ width: '140px', display: 'inline-block', margin: '0 10px', }}
                         >
-                            
                             {
-                                this.props.ZYXValue.map((item,index)=>{
+                                this.props.ZYXValue.map((item, index) => {
                                     return <Option value={item} key={index}>{item}</Option>
                                 })
                             }
                         </Select>
-
-
                         <Input type="text" placeholder="请填写中文表名"
                             onChange={this.srcTabNameCnValue.bind(this)}
                             value={this.state.srcTabNameCn}
@@ -71,28 +72,42 @@ class queryFunction extends React.Component {
                             onChange={this.ruleDescValue.bind(this)}
                             value={this.state.ruleDesc}
                             style={{ width: '140px', display: 'inline-block', margin: '0 10px', }} />
-
-
                         <QueryFunctionStyle >
-                            <Form.Item>
-                                <Button block type="primary"
-                                    onClick={this.classfyListFilter.bind(this)}
-                                    style={{ width: '75px', margin: '0 10px' }}
-                                >查询</Button>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    <Form.Item>
+                                        <Button style={{ width: '75px', margin: '0 10px' }}
+                                            type="primary"
+                                            onClick={this.BackHistory.bind(this)}
+                                        >返回</Button>
+                                        <Button block type="primary"
+                                            onClick={this.classfyListFilter.bind(this)}
+                                            style={{ width: '75px', margin: '0 10px' }}
+                                        >查询</Button>
 
-                            </Form.Item>
-                            <div >
-                                <Button block type="primary" style={{ width: '75px', margin: '0 10px' }}
-                                    onClick={this.ResetClick.bind(this)}
-                                >重置</Button>
-                                <Button block type="primary"
-                                    style={{ width: '75px', margin: '0 10px' }}
-                                    onClick={this.ReviewFromList.bind(this)}
-                                >检核</Button>
+                                    </Form.Item>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <Button block type="primary" style={{ width: '75px', margin: '0 10px' }}
+                                            onClick={this.ResetClick.bind(this)}
+                                        >重置</Button>
+                                        <Button block type="primary"
+                                            style={{ width: '75px', margin: '0 10px' }}
+                                            onClick={this.ReviewFromList.bind(this)}
+                                        >检核</Button>
+                                        <div style={{ margin: '0 10px',position:'relative' }}>
+                                            <Button type="primary"
+                                                onClick={this.BackTypeClick.bind(this)}
+                                               
+                                            >当前检核状态</Button>
+                                            
+                                        </div>
+                                        <Progress percent={this.state.Percentage} status="active" style={{ width: '288px' }} />
+                                    </div>
+                                </div>
                                 <Search
                                     placeholder={this.state.Time}
                                     onSearch={this.SearchValue.bind(this)}
-                                    style={{ width: 200 }}
+                                    style={{ width: 200, height: '34px' }}
 
                                 />
                             </div>
@@ -106,12 +121,12 @@ class queryFunction extends React.Component {
                     onCancel={this.handleCancel.bind(this)}
                 >
                     <div>
-                    <Calendar 
-                        onPanelChange={this.onPanelChange.bind(this)}
-                        fullscreen={false}
-                        onSelect={this.onSelect.bind(this)}
-                         />
-                        
+                        <Calendar
+                            onPanelChange={this.onPanelChange.bind(this)}
+                            fullscreen={false}
+                            onSelect={this.onSelect.bind(this)}
+                        />
+
                     </div>
                 </Modal>
             </Fragment>
@@ -172,7 +187,6 @@ class queryFunction extends React.Component {
     }
     onSelect = value => {
         console.log(value, "999999")
-
         const d = new Date(value._d)
         const resDate = d.getFullYear() + '-' + this.p((d.getMonth() + 1)) + '-' + this.p(d.getDate())
 
@@ -180,7 +194,7 @@ class queryFunction extends React.Component {
         this.setState({
             Time: resDate,
             value: resDate,
-        },()=>{
+        }, () => {
             this.handleOk()
         });
     };
@@ -190,17 +204,112 @@ class queryFunction extends React.Component {
         const d = new Date(value._d)
         const resDate = d.getFullYear() + '-' + this.p((d.getMonth() + 1)) + '-' + this.p(d.getDate())
         console.log(resDate, "777")
-        this.setState({ 
-            value: resDate 
+        this.setState({
+            value: resDate
         });
     };
     componentDidMount() {
         this.TimeLocal()
+        let ReviewId = JSON.parse(localStorage.getItem('review'))
+        let Percentage = JSON.parse(localStorage.getItem('Percentage'))
+        this.setState({
+            Percentage: Percentage,
+        })
+        if (ReviewId == 1) {
+            this.setState({
+                Percentage: Percentage,
+                ErrorValue: 0,
+                TrueValue: 0,
+                loading:false
+            }, () => {
+                let localPercentage = JSON.parse(localStorage.getItem('Percentage'))
+                this.setIntervalValue(localPercentage)
+            })
+        }else{
+            this.setState({
+                loading:true
+            })
+        }
+    }
+    // 时间戳的函数
+    setIntervalValue(val) {
+        console.log(val)
+        let FromListLength = JSON.parse(localStorage.getItem('FromListLength'))
+        let Summation = 0
+        let t = 0;
+        let FromListStatus = JSON.parse(localStorage.getItem('FromListStatus'))
+
+        let _this = this
+        let sum = 0
+        let ErrorValue = JSON.parse(localStorage.getItem('ErrorValue'))
+        let TrueValue = JSON.parse(localStorage.getItem('TrueValue'))
+        let ArrayId = []
+        for (var q = 0; q < FromListStatus.length; q++) {
+            if (FromListStatus[q].statusType == '正在执行') {
+                ArrayId.push(FromListStatus[q].id)
+            }
+        }
+        console.log(ArrayId, 'Array')
+        setInterval(async function () {
+            let Array = []
+            t = Summation
+            let MathLength = parseInt(Math.random() * 100)
+            Summation = Summation + MathLength
+            // 清除一下定时器
+            if (t > ArrayId.length) {
+                clearInterval()
+            }
+            for (var i = 0; i < ArrayId.length; i++) {
+                if (t > ArrayId.length) return
+                if (t <= i && i < Summation) {
+                    Array.push(ArrayId[i])
+                }
+            }
+            let data = await JHIDSH(Array)
+            console.log(data)
+            if (data.data) {
+                ErrorValue += data.data.errorCount
+                TrueValue += data.data.trueCount
+                sum += data.data.errorCount + data.data.trueCount
+                // 使用随机数，往后端随机传id
+                let Percentage = Math.ceil((sum / FromListLength) * 100) + val
+                let Error = data.data.error[0].split(",")//失范的数组
+                let True = data.data.true[0].split(",")//成功的数组
+                for (var j = 0; j < FromListStatus.length; j++) {
+                    for (var k = 0; k < Error.length; k++) {
+                        if (FromListStatus[j].id == Error[k]) {
+                            FromListStatus[j].statusType = '执行失败'
+                        }
+                    }
+                }
+                for (var N = 0; N < FromListStatus.length; N++) {
+                    for (var M = 0; M < True.length; M++) {
+                        if (FromListStatus[N].id == True[M]) {
+                            FromListStatus[N].statusType = '执行成功'
+                        }
+                    }
+                }
+                localStorage.setItem('ErrorValue', JSON.stringify(ErrorValue))
+                localStorage.setItem('TrueValue', JSON.stringify(TrueValue))
+                localStorage.setItem('Percentage', JSON.stringify(Percentage))
+                localStorage.setItem('FromListStatus', JSON.stringify(FromListStatus))
+                _this.setState({
+                    Percentage: Percentage,
+                })
+                let FromListStatusBool = FromListStatus.every(function (item, index, array) {
+                    return item.statusType != '正在执行'
+                })
+                if (FromListStatusBool) {
+                   
+                    localStorage.setItem('review', JSON.stringify(0))
+                }
+            }
+        }, 2000)
     }
     // 获取本地日期
     TimeLocal() {
-        let TimeData = new Date()
-        let resDate = TimeData.getFullYear() + '-' + this.p((TimeData.getMonth() + 1)) + '-' + this.p(TimeData.getDate())
+        let TimeData = this.props.DetailTime
+        let resDate = this.props.DetailTime
         console.log(resDate, "处理过的本地日期")
         this.setState({
             Time: resDate,
@@ -237,8 +346,11 @@ class queryFunction extends React.Component {
     }
     // 点击检核检核数据
     ReviewFromList() {
+        localStorage.setItem('ErrorValue', JSON.stringify(0))
+        localStorage.setItem('TrueValue', JSON.stringify(0))
+        localStorage.setItem('Percentage', JSON.stringify(0))
+        localStorage.setItem('FromListStatus', JSON.stringify(0))
         this.props.queryFromBool(this.state.Time)
-
     }
     // 重要性
     LevelhandleChange(value) {
@@ -251,6 +363,15 @@ class queryFunction extends React.Component {
         this.setState({
             ruleType: value
         })
+    }
+    // BackTypeClick 跳转到当前检核状态
+    BackTypeClick() {
+        console.log(this)
+        this.props.history.push('/DataChecking/CheckingUp')
+    }
+    // 返回上一页
+    BackHistory() {
+        this.props.history.push('/UserChoice')
     }
 }
 export default queryFunction

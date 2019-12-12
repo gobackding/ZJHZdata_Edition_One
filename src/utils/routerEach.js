@@ -14,12 +14,10 @@ export default (routes) => {
                         route.children.map((child) => {
                             if (child.children) {
                                 return eachRoutes(child)
-
                             } else {
                                 return <Route path={child.path} key={child.key} render={(props) => {
                                     if (Cookies.get("token") || child.path === "/Login") {
                                         return child.path === "/Login" ? <child.component {...props} /> : <LayoutComponent><child.component {...props} /></LayoutComponent>
-
                                     } else {
                                         return <Redirect to={{ pathname: "/Login" }} />
                                     }
@@ -41,7 +39,6 @@ export default (routes) => {
     return routes.map((route) => {
         if (route.children) {
             return eachRoutes(route)
-
         } else {
             return <Route path={route.path} key={route.key} render={(props) => {
                 // 这里需要进行修改，判断当时登录注册页面的时候，是单独的页面的

@@ -11,7 +11,7 @@ const mapDisPathToProps = (dispatch)=>({
         arr.userId=e.target.userId.value
         arr.password=e.target.password.value
         console.log(arr,"login")
-        this.props.history.push("/Home")
+        // this.props.history.push("/UserInterface")
     },
     ClickSignValue(){
         this.props.history.push("/Sign")

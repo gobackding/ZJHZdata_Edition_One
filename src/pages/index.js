@@ -37,11 +37,11 @@ const SBAdministration = reactLoadable({
     loader:()=>import("./SBAdministration"),
     loading:Loading
 })
-const CE = reactLoadable({
-    loader:()=>import("./ce"),
+const Historical = reactLoadable({
+    loader:()=>import("./Historical"),
     loading:Loading
 })
 
 export {
-    Home,Login,Sign,ClassfyList,Supervise,Administration,CheckingUp,FileManagement,SBAdministration,CE
+    Home,Login,Sign,ClassfyList,Supervise,Administration,CheckingUp,FileManagement,SBAdministration,Historical
 }

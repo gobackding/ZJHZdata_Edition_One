@@ -77,9 +77,9 @@ class ReverseChecking extends React.Component {
                                     {
                                         ArrayTH.map((itm, idx) => {
                                             if (idx == 0) {
-                                                return <td style={{ margin: '10px 0 10px 0', display: 'block' }}>{item[itm]}</td>
+                                                return <td style={{ margin: '10px 0 10px 0', display: 'block' }} key={idx}>{item[itm]}</td>
                                             } else {
-                                                return <td style={{ margin: '10px 0 10px 0' }}>{item[itm]}</td>
+                                                return <td style={{ margin: '10px 0 10px 0' }} key={idx}>{item[itm]}</td>
                                             }
 
                                         })
@@ -116,11 +116,21 @@ class ReverseChecking extends React.Component {
                 address: `London, Park Lane no. ${i}`,
             });
         }
+        // this.props.val[0].td.length
+        let tddata = this.props.val[0].td
+        let TD = []
+        for( var i = 0 ; i<tddata.length ; i++ ){
+            if(0<=i && i<10){
+                TD.push(tddata[i])
+            }
+        }
+        let totalCount = 20
         this.setState({
             data: Array,
             thdata: this.props.val[0].th,
-            tddata: this.props.val[0].td,
-            topdata: this.props.val[0].topdate
+            tddata: TD,
+            topdata: this.props.val[0].topdate,
+            totalCount:totalCount
         }, () => {
             console.log(this.state.tddata, "tddata")
         })
@@ -128,6 +138,10 @@ class ReverseChecking extends React.Component {
     // 分页
     onChange(pageNumber) {
         console.log(pageNumber)
+        let TDData = this.props.val[0].td
+        let Max =  pageNumber*10
+
+        
         // let data = await pagingListApi(pageNumber)
         // console.log(data)
         // this.setState({

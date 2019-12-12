@@ -4,6 +4,7 @@ import Eachrouter from "@utils/routerEach";
 import { Switch, Redirect } from "react-router-dom"
 import { ConfigProvider } from 'antd'
 import zhCN from 'antd/es/locale/zh_CN'
+import 'moment/locale/zh-cn'
 class App extends React.Component {
   render() {
     return (
@@ -11,7 +12,7 @@ class App extends React.Component {
         <ConfigProvider locale={zhCN}>
           <Switch>
             {Eachrouter(EachWhole)}
-            <Redirect from="/" to="/Sign" />
+            <Redirect from="/" to="/Login" />
           </Switch>
         </ConfigProvider>
       </Fragment>

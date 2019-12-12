@@ -12,22 +12,26 @@ const columns = [
         title: '规则号',
         dataIndex: 'ruleSeq',
         align: 'center',
-        width: '100px'
+        width: '100px',
+        ellipsis: true,
     },
     {
         title: '规则描述',
         dataIndex: 'ruleDesc',
         align: 'center',
+        ellipsis: true,
     },
     {
         title: '中文表名',
         dataIndex: 'srcTabNameCn',
         align: 'center',
+        ellipsis: true,
     },
     {
         title: '英文表名',
         dataIndex: 'srcTabNameEn',
         align: 'center',
+        ellipsis: true,
     },
     // {
     //     title: '字段',
@@ -41,6 +45,7 @@ const columns = [
         align: 'center',
         width: '100px',
         defaultSortOrder: 'descend',
+        ellipsis: true,
         sorter: (a, b) => a.sfsjzl - b.sfsjzl,
     },
     {
@@ -49,6 +54,7 @@ const columns = [
         align: 'center',
         width: '100px',
         filterMultiple: false,
+        ellipsis: true,
         sorter: (a, b) => {
             return parseInt(a.sfsjbl) - parseInt(b.sfsjbl)
         },
@@ -57,7 +63,8 @@ const columns = [
         title: '采集日期',
         dataIndex: 'cjrq',
         align: 'center',
-        width: '100px'
+        width: '100px',
+        ellipsis: true,
     }
 ];
 
@@ -92,14 +99,44 @@ class JHLSFX extends React.Component {
             LC: 1,
             InputValueH: 1,
             DCTCBool: false,//样本导出
+            // 下面的事弹窗 --反查
+            columns: [
+                {
+                    title: 'Name',
+                    dataIndex: 'name',
+                    width: 150,
+                },
+                {
+                    title: 'Age',
+                    dataIndex: 'age',
+                    width: 150,
+                },
+                {
+                    title: 'Address',
+                    dataIndex: 'address',
+                }
+            ],
+            selectedRowKeys: [],
+            thdata: [],
+            tddata: [],
+            topdata: {},
+            ReversePage: 10,//分页器的总数
+            ReversePageID: 1,
+            TableAllData: [],//table反查全部的数据
+            TableDisplayData: [],//table展示的数据
         }
 
     }
     render() {
+        const { selectedRowKeys, topdata, tddata } = this.state;
+        const rowSelection = {
+            selectedRowKeys,
+            onChange: this.onSelectChange,
+        };
         return (
             <Fragment>
                 <div style={{ height: '40px', backgroundColor: '#fff', lineHeight: '40px', paddingLeft: 10, fontSize: '14px', color: '#333' }}>
-                    当前位置：首页-检核结果历史分析
+                    当前位置：首页-检核报告
                 </div>
                 <div style={{ padding: '10px' }} className="supervisorTableFY">
                     <div style={{ display: 'flex', justifyContent: "space-between" }}>
@@ -165,14 +202,7 @@ class JHLSFX extends React.Component {
                             defaultCurrent={this.state.currPage} total={this.state.totalCount}
                             onChange={this.SupervisorFY.bind(this)} />
                     </div>
-                    <div style={{ backgroundColor: '#fff', marginTop: '10px', display: 'none', justifyContent: 'space-between' }}>
-                        <div style={{ width: '480px', height: '380px', display: 'inline-block', margin: '10px' }}>
-                            <ColumnChart />
-                        </div>
-                        <div style={{ width: '480px', height: '380px', display: 'inline-block', margin: '10px' }}>
-                            <EchartPie></EchartPie>
-                        </div>
-                    </div>
+                   
                     <Modal
                         title="日历"
                         visible={this.state.visible}
@@ -189,10 +219,66 @@ class JHLSFX extends React.Component {
                         onCancel={this.handleCancel.bind(this)}
                         className="ReverseChecking"
                     >
-                        <ReverseChecking
-                            CloseClick={this.CloseClick.bind(this)}
-                            val={this.state.EditListValue}
-                        />
+                        <div className="SuperviseTable">
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                                <span>表名：{topdata.srcTabNameEn}</span>
+                                <span>规则描述：{topdata.ruleDesc}</span>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <span>导出数量(行)</span>
+                                    <Input type="text" style={{ marginRight: '10px' }} defaultValue={tddata.length} />
+                                    <Button type="primary" onClick={this.ExportExcel.bind(this)}>导出</Button>
+                                </div>
+                            </div>
+                            <div style={{ maxHeight: '280px', overflow: 'auto' }}>
+                                <table width="100%" style={{ fontSize: "12px" }}>
+                                    <tr style={{ backgroundColor: "#f4f4f4", borderBottom: "1px solid #e8e8e8", textAlign: 'center' }}>
+                                        {
+                                            this.state.thdata.map(item => {
+                                                return <th key={item.id} style={{
+                                                    padding: "5px 0 5px 10px", borderBottom: "1px solid #e8e8e8"
+                                                }}>{item.fieldNameEn}</th>
+
+                                            })
+                                        }
+                                    </tr>
+                                    {
+                                        this.state.tddata.map((item, index) => {
+                                            if (item) {
+                                                let ArrayTH = []
+                                                for (var i = 0; i < this.state.thdata.length; i++) {
+                                                    ArrayTH.push(this.state.thdata[i].fieldNameEn)
+                                                }
+                                                return <tr style={{ borderBottom: "1px solid #e8e8e8", textAlign: 'center' }} key={index}>
+                                                    {
+                                                        ArrayTH.map((itm, idx) => {
+                                                            if (idx == 0) {
+                                                                return <td style={{ margin: '10px 0 10px 0', display: 'block' }} key={idx}>{item[itm]}</td>
+                                                            } else {
+                                                                return <td style={{ margin: '10px 0 10px 0' }} key={idx}>{item[itm]}</td>
+                                                            }
+
+                                                        })
+
+                                                    }
+                                                </tr>
+                                            }
+                                        })
+                                    }
+                                </table>
+                            </div>
+                            <Pagination
+                                showQuickJumper
+                                onChange={this.ReversePageSearch.bind(this)}
+                                defaultCurrent={this.state.ReversePageID}
+                                total={this.state.ReversePage}
+                                style={{ marginTop: '10px' }}
+                            />
+                            <div>
+                                <Button type="primary" style={{ marginTop: '10px' }}
+                                    onClick={() => this.CloseClick(this.state.tddata, '表单')}>关闭</Button>
+                            </div>
+
+                        </div>
 
                     </Modal>
                     <Modal
@@ -213,9 +299,9 @@ class JHLSFX extends React.Component {
         )
     }
     // 样本导出
-    DCYBValue(){
+    DCYBValue() {
         this.setState({
-            DCTCBool:false
+            DCTCBool: false
         })
     }
     // 输出的行数
@@ -256,9 +342,35 @@ class JHLSFX extends React.Component {
         console.log(record)
         let ListValueApi = await CHECKVALUEPAI(record.ruleSeq)
         console.log(ListValueApi, "双击-接口")
+        let TableList = ListValueApi.data[0].td
+        let TableDsplayData = []
+        if (TableList[0]) {
+            if (TableList.length > 10) {
+                for (var i = 0; i < 10; i++) {
+                    TableDsplayData.push(TableList[i])
+                }
+            } else if (TableList.length < 10) {
+                for (var i = 0; i < TableList.length; i++) {
+                    TableDsplayData.push(TableList[i])
+                }
+            }
+        } else {
+            let Array = []
+            let obj = {}
+            for (var i = 0; i < ListValueApi.data[0].th.length; i++) {
+                Array.push(ListValueApi.data[0].th[i].fieldNameEn)
+                obj[ListValueApi.data[0].th[i].fieldNameEn] = '暂无数据'
+            }
+            TableDsplayData.push(obj)
+        }
         this.setState({
             ReverseChecking: true,
-            EditListValue: ListValueApi.data
+            thdata: ListValueApi.data[0].th,
+            tddata: TableDsplayData,
+            topdata: ListValueApi.data[0].topdate,
+            TableAllData: ListValueApi.data[0].td
+        }, () => {
+            console.log(this.state.tddata, "tddata")
         })
     }
     componentDidMount() {
@@ -312,10 +424,10 @@ class JHLSFX extends React.Component {
         FromArr.Time = str
         FromArr.sblc = ""
         let RQTime = await HQLCLIST(FromArr)
-        let RQArray = RQTime.data.sort(function(a,b){
-            return b-a
+        let RQArray = RQTime.data.sort(function (a, b) {
+            return b - a
         })
-        console.log(RQTime,"RQTime")
+        console.log(RQTime, "RQTime")
         console.log(FromArr, "FromArr")
         this.setState({
             visible: false,
@@ -334,7 +446,7 @@ class JHLSFX extends React.Component {
     }
     // 生成上报
     SCSBClickhandler() {
-        this.props.HiddenDisplay()
+        this.props.history.push('/DataChecking/SubmitReport')
     }
     // 点击确定关闭弹窗
     handleOk() {
@@ -356,16 +468,16 @@ class JHLSFX extends React.Component {
         val.lc = this.state.SelectValue//轮次
         val.cjrq = this.state.calendarTime//时间
         val.hc = this.state.InputValueH//导出行
-        console.log(val,"导出Excel")
+        console.log(val, "导出Excel")
         let data = await DCYBSCSL(val)
         console.log(data)
-        
+
     }
     // 关闭数据反查弹框
     CloseClick() {
         this.setState({
             ReverseChecking: false,
-            EditListValue:[]
+            EditListValue: []
         })
     }
     // 点击查询，获取日历-轮次
@@ -381,6 +493,38 @@ class JHLSFX extends React.Component {
             currPage: data.data.page.currPage,
             totalCount: data.data.page.totalCount
         })
+    }
+    // 数据反查
+    // 分页
+    // 关闭按钮
+    CloseClick() {
+        this.setState({
+            ReverseChecking: false
+        })
+    }
+    p(s) {
+        return s < 10 ? '0' + s : s
+    }
+    // 导出表格
+    ExportExcel(e) {
+
+    }
+    // 数据反查的分页器
+    ReversePageSearch(pageNumber) {
+        console.log(pageNumber, "1111")
+        let TableAllData = this.state.TableAllData
+        let num = (pageNumber - 1) * 10
+        let max = num + 10
+        let TableDsplayData = []
+        for (var i = num; i < max; i++) {
+            TableDsplayData.push(TableAllData[i])
+        }
+        console.log(TableDsplayData, 'TableDsplayData')
+        this.setState({
+            tddata: TableDsplayData,
+
+        })
+        console.log(pageNumber);
     }
 }
 export default JHLSFX

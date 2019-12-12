@@ -1,6 +1,7 @@
-import { Home, Login, Sign, ClassfyList, Supervise, Administration ,CheckingUp,FileManagement,SBAdministration,CE} from "@pages/index.js"
-import { Exhibition, Import, LowerHair ,GenerateReport} from "@components/index"
+import { Home, Login, Sign, ClassfyList, Supervise, Administration, CheckingUp, FileManagement, SBAdministration, Historical } from "@pages/index.js"
+import { JHLSFX,SubmitReport } from "@components/index"
 
+import { XTGLPage, DataChecking,UserInterface ,UserChoice} from "@lib/MainPage"
 export const PagesComponent = [
     {
         key: "/Login",
@@ -25,84 +26,145 @@ export const PagesComponent = [
 ]
 export const layoutRoute = [
     {
-        key: "/Home",
-        path: "/Home",
-        icon: "fund",
-        name: "规则管理",
-        component:Home
-    },
-    {
-        key: "/FileManagement",
-        path: "/FileManagement",
-        component: FileManagement,
+        key: "/UserInterface",
+        path: "/UserInterface",
+        class:'UserInterface',
+        component: UserInterface,
         icon: "folder-open",
-        name: "文件管理",
+        name: "用户界面",
         meta: {
             flag: true
         }
     },
     {
-        key: "/ClassfyList",
-        path: "/ClassfyList",
-        component: ClassfyList,
-        icon: "hdd",
-        name: "数据检核",
+        key: "/UserChoice",
+        path: "/UserChoice",
+        class:'UserChoice',
+        component: UserChoice,
+        icon: "folder-open",
+        name: "用户选择",
         meta: {
             flag: true
         }
+    },
+    {
+        key: "/DataChecking",
+        path: "/DataChecking",
+        class:'DataChecking',
+        icon: "fund",
+        name: "数据检核",
+        component: DataChecking,
+        children: [
+            {
+                key: "/DataChecking/FileManagement",
+                path: "/DataChecking/FileManagement",
+                class:'FileManagement',
+                component: FileManagement,
+                icon: "folder-open",
+                name: "文件检核",
+                meta: {
+                    flag: true
+                }
+            },
+            {
+                key: "/DataChecking/ClassfyList",
+                path: "/DataChecking/ClassfyList",
+                class:'ClassfyList',
+                component: ClassfyList,
+                icon: "hdd",
+                name: "数据检核",
+                meta: {
+                    flag: true
+                }
+            },
+            {
+                key: "/DataChecking/JHLSFX",
+                path: "/DataChecking/JHLSFX",
+                class:'JHLSFX',
+                component: JHLSFX,
+                icon: "pie-chart",
+                name: "检核报告",
+                meta: {
+                    flag: true
+                }
+            },
+            {
+                key: "/DataChecking/SubmitReport",
+                path: "/DataChecking/SubmitReport",
+                class:'SubmitReport',
+                component: SubmitReport,
+                icon: "pie-chart",
+                name: "生成上报",
+                meta: {
+                    flag: true
+                }
+            },
+            {
+                key: "/DataChecking/Historical",
+                path: "/DataChecking/Historical",
+                class:'Historical',
+                component: Historical,
+                icon: "pie-chart",
+                name: "检核结果",
+                meta: {
+                    flag: true
+                }
+            },
+            {
+                key: "/DataChecking/CheckingUp",
+                path: "/DataChecking/CheckingUp",
+                class:'CheckingUp',
+                component: CheckingUp,
+                icon: "copy",
+                name: "检核状态",
+                meta: {
+                    flag: true
+                }
+            }
+        ]
+    },
+    {
+        key: "/XTGLPage",
+        path: "/XTGLPage",
+        class:'XTGLPage',
+        icon: "fund",
+        name: "系统管理",
+        component: XTGLPage,
+        children: [
+            
+            {
+                key: "/XTGLPage/Administration",
+                path: "/XTGLPage/Administration",
+                class:'Administration',
+                component: Administration,
+                icon: "setting",
+                name: "用户管理",
+                meta: {
+                    flag: true
+                }
+            },
+            {
+                key: "/XTGLPage/Home",
+                path: "/XTGLPage/Home",
+                class:'Home',
+                icon: "fund",
+                name: "规则管理",
+                component: Home
+            },
+        ]
     },
     {
         key: "/SBAdministration",
         path: "/SBAdministration",
+        class:'SBAdministration',
         component: SBAdministration,
         icon: "pie-chart",
         name: "上报管理",
         meta: {
             flag: true
-        },
-        // children:[
-        //     {
-        //         key: "/SBAdministration/GenerateReport",
-        //         path: "/SBAdministration/GenerateReport",
-        //         component: GenerateReport,
-        //         icon: "pie-chart",
-        //         name: "上报管理",
-        //         meta: {
-        //             flag: true
-        //         }
-        //     }
-        // ]
-    },
-    {
-        key: "/Supervise",
-        path: "/Supervise",
-        component: Supervise,
-        icon: "pie-chart",
-        name: "历史分析",
-        meta: {
-            flag: true
         }
     },
-    {
-        key: "/Administration",
-        path: "/Administration",
-        component: Administration,
-        icon: "setting",
-        name: "系统管理",
-        meta: {
-            flag: true
-        }
-    },
-    {
-        key: "/CheckingUp",
-        path: "/CheckingUp",
-        component: CheckingUp,
-        icon: "copy",
-        name: "检核状态",
-        meta: {
-            flag: true
-        }
-    }
+    
 ]
 
 

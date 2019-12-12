@@ -17,6 +17,14 @@ const GenerateReport = reactLoadable({
     loader:()=>import("./SBAdministration/GenerateReport"),
     loading:Loading
 })
+const JHLSFX = reactLoadable({
+    loader:()=>import('./supervise/JHLSFX'),
+    loading:Loading
+})
+const SubmitReport = reactLoadable({
+    loader:()=>import('./supervise/SubmitReport'),
+    loading:Loading
+})
 export {
-    Exhibition,Import,LowerHair,GenerateReport
+    Exhibition,Import,LowerHair,GenerateReport,JHLSFX,SubmitReport
 }
